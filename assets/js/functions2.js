@@ -50,7 +50,7 @@ pixiCache.graphics2.endFill();
 pixiCache.page2.addChild(pixiCache.graphics2);
 
 pixiCache.graphics3.beginFill(0x0000FF);
-pixiCache.graphics3.lineStyle(1, 0xFF0000, 1);
+pixiCache.graphics3.lineStyle(1, 0x0000FF, 1);
 pixiCache.graphics3.drawRect(0, 0, dataCache.viewSize.width, dataCache.viewSize.height);
 pixiCache.graphics3.endFill();
 
@@ -170,6 +170,7 @@ var zoomInRight = function (page, runTime) {
     cache.lock = true;
     tween40 = new TWEEN.Tween(run0)
         .to(run60, animationTime * 0.6)
+        .delay(100)
         .easing(TWEEN.Easing.Quadratic.In)
         .onUpdate(update);
     tween100 = new TWEEN.Tween(run0)
@@ -207,6 +208,7 @@ var zoomInLeft = function (page, runTime) {
     cache.lock = true;
     tween40 = new TWEEN.Tween(run0)
         .to(run60, animationTime * 0.6)
+        .delay(100)
         .easing(TWEEN.Easing.Quadratic.In)
         .onUpdate(update);
     tween100 = new TWEEN.Tween(run0)
@@ -229,7 +231,7 @@ var nextPage = function () {
     pixiCache[inPage].position.x = -dataCache.viewSize.width;
     pixiCache.stage.addChild(pixiCache.page2);
     zoomOutRight(pixiCache[outPage], 1000);
-    zoomInLeft(pixiCache[inPage], 1200);
+    zoomInLeft(pixiCache[inPage], 1000);
     cache.nowPage += 1;
 };
 var prevPage = function () {
@@ -242,7 +244,7 @@ var prevPage = function () {
     pixiCache[inPage].position.x = dataCache.viewSize.width;
     pixiCache.stage.addChild(pixiCache.page2);
     zoomOutLeft(pixiCache[outPage], 1000);
-    zoomInRight(pixiCache[inPage], 1200);
+    zoomInRight(pixiCache[inPage], 1000);
     cache.nowPage -= 1;
 };
 interact($el.main.get(0))
