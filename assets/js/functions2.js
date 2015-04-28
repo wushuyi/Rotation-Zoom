@@ -1,3 +1,4 @@
+$(document).ready(function($){
 var $el = {};
 var pixiCache = {};
 var dataCache = {};
@@ -5,6 +6,7 @@ var cache = {};
 $el.win = $(window);
 $el.wrapper = $('.wrapper');
 $el.main = $('#main');
+var stats;
 
 dataCache.viewSize = {
     width: 640,
@@ -43,7 +45,7 @@ pixiCache.page1.addChild(pixiCache.graphics1);
 pixiCache.page1.addChild(pixiCache.title);
 
 pixiCache.graphics2.beginFill(0x00FF00);
-pixiCache.graphics2.lineStyle(1, 0xFF0000, 1);
+pixiCache.graphics2.lineStyle(1, 0x00FF00, 1);
 pixiCache.graphics2.drawRect(0, 0, dataCache.viewSize.width, dataCache.viewSize.height);
 pixiCache.graphics2.endFill();
 
@@ -63,9 +65,10 @@ pixiCache.stage.addChild(pixiCache.page2);
 pixiCache.stage.addChild(pixiCache.page1);
 
 var animate = function animateFn(time) {
+    TWEEN.update(time);
     requestAnimationFrame(animate);
     pixiCache.renderer.render(pixiCache.stage);
-    TWEEN.update(time);
+    stats.update();
 };
 
 var zoomOutRight = function (page, runTime) {
@@ -170,7 +173,6 @@ var zoomInRight = function (page, runTime) {
     cache.lock = true;
     tween40 = new TWEEN.Tween(run0)
         .to(run60, animationTime * 0.6)
-        .delay(100)
         .easing(TWEEN.Easing.Quadratic.In)
         .onUpdate(update);
     tween100 = new TWEEN.Tween(run0)
@@ -178,7 +180,9 @@ var zoomInRight = function (page, runTime) {
         .easing(TWEEN.Easing.Quadratic.In)
         .onUpdate(update);
     tween40.chain(tween100);
-    tween40.start();
+    setTimeout(function(){
+        tween40.start();
+    }, 100);
 };
 var zoomInLeft = function (page, runTime) {
     var animationTime = runTime;
@@ -197,7 +201,7 @@ var zoomInLeft = function (page, runTime) {
         scale: 0.1,
         positionX: -1000
     };
-    var tween40, tween100;
+    var tween60, tween100;
     var update = function () {
         page.alpha = run0.alpha;
         page.scale.x = run0.scale;
@@ -206,17 +210,18 @@ var zoomInLeft = function (page, runTime) {
         page.position.y = (1 - run0.scale) * page.height;
     };
     cache.lock = true;
-    tween40 = new TWEEN.Tween(run0)
+    tween60 = new TWEEN.Tween(run0)
         .to(run60, animationTime * 0.6)
-        .delay(100)
         .easing(TWEEN.Easing.Quadratic.In)
         .onUpdate(update);
     tween100 = new TWEEN.Tween(run0)
         .to(run100, animationTime * 0.4)
         .easing(TWEEN.Easing.Quadratic.In)
         .onUpdate(update);
-    tween40.chain(tween100);
-    tween40.start();
+    tween60.chain(tween100);
+    setTimeout(function(){
+        tween60.start();
+    }, 100);
 };
 cache.lock = false;
 cache.pageMax = 3;
@@ -263,4 +268,12 @@ interact($el.main.get(0))
         }
     });
 
-requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
+    stats = new Stats();
+    var sds = stats.domElement.style;
+    sds.position = 'absolute';
+    sds.right = '0px';
+    sds.top = '0px';
+    sds.margin = '4em 3em';
+    document.body.appendChild(stats.domElement);
+});

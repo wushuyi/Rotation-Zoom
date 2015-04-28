@@ -4,9 +4,10 @@ $el.win = $(window);
 $el.wrapper = $('.wrapper');
 $el.main = $('#main');
 cache.imgUrl = './assets/images/mybsd.png';
+var stats;
 
 
-$el.wrapper.on('touchmove', function(e){
+$el.wrapper.on('touchmove', function (e) {
     e.preventDefault();
 });
 
@@ -16,6 +17,15 @@ var renderer = new PIXI.autoDetectRenderer(640, 960, {
 });
 
 var stage = new PIXI.Container();
+
+var animate = function animateFn() {
+    requestAnimationFrame(animate);
+    if (cache.needRender) {
+        renderer.render(stage);
+        cache.needRender = false;
+    }
+    stats.update();
+};
 
 var mybsd = new PIXI.Sprite.fromImage(cache.imgUrl);
 mybsd.position.set(640 / 2, 960 / 2);
@@ -28,24 +38,14 @@ title.y = 30;
 stage.addChild(mybsd);
 stage.addChild(title);
 
-requestAnimationFrame(animate);
-
 cache.needRender = false;
-function animate()
-{
-    requestAnimationFrame(animate);
-    if(cache.needRender){
-        renderer.render(stage);
-        cache.needRender = false;
-    }
-}
+
 
 var img = document.createElement('img');
 img.onload = function () {
     cache.needRender = true;
 };
 img.src = cache.imgUrl;
-
 
 
 cache.angle = null;
@@ -72,18 +72,28 @@ interact($el.main.get(0))
     })
     .draggable({
         onmove: function (event) {
-            if(!cache.isMove){
-                if(Math.abs(event.dx) > 8 || Math.abs(event.dy) > 8){
+            if (!cache.isMove) {
+                if (Math.abs(event.dx) > 8 || Math.abs(event.dy) > 8) {
                     cache.isMove = true;
                 }
-            }else{
+            } else {
                 cache.position.x += event.dx;
                 cache.position.y += event.dy;
                 mybsd.position.set(cache.position.x, cache.position.y);
                 cache.needRender = true;
             }
         },
-        onend: function (evnet){
+        onend: function (evnet) {
             cache.isMove = false;
         }
     });
+
+stats = new Stats();
+var sds = stats.domElement.style;
+sds.position = 'absolute';
+sds.right = '0px';
+sds.top = '0px';
+sds.margin = '4em 3em';
+document.body.appendChild(stats.domElement);
+
+requestAnimationFrame(animate);
