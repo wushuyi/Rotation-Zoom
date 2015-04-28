@@ -236,7 +236,7 @@ var nextPage = function () {
     pixiCache[inPage].position.x = -dataCache.viewSize.width;
     pixiCache.stage.addChild(pixiCache.page2);
     zoomOutRight(pixiCache[outPage], 1000);
-    zoomInLeft(pixiCache[inPage], 1000);
+    zoomInLeft(pixiCache[inPage], 1200);
     cache.nowPage += 1;
 };
 var prevPage = function () {
@@ -249,7 +249,7 @@ var prevPage = function () {
     pixiCache[inPage].position.x = dataCache.viewSize.width;
     pixiCache.stage.addChild(pixiCache.page2);
     zoomOutLeft(pixiCache[outPage], 1000);
-    zoomInRight(pixiCache[inPage], 1000);
+    zoomInRight(pixiCache[inPage], 1200);
     cache.nowPage -= 1;
 };
 interact($el.main.get(0))
