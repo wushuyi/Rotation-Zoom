@@ -65,7 +65,7 @@ pixiCache.stage.addChild(pixiCache.page2);
 pixiCache.stage.addChild(pixiCache.page1);
 
 var animate = function animateFn(time) {
-    TWEEN.update(time);
+    TWEEN.update();
     requestAnimationFrame(animate);
     pixiCache.renderer.render(pixiCache.stage);
     stats.update();
